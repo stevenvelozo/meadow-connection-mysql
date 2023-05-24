@@ -26,3 +26,14 @@ will need to be run to `_Fable.MeadowMySQLProvider.connect()` when you want to c
 
 This documentation does not yet get into how to instantiate multiple connections and manage them with fable,
 although it can be done easily.
+
+## Using a Connection Pool
+
+```
+_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+	(pError, pRows, pFields) =>
+	{
+		// pRows is flush with books now.
+		console.log(`We found ${pRows.length} books.`);
+	});
+}

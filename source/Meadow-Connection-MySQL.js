@@ -56,7 +56,7 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 			{
 				this.options.MySQL.database = this.options.MySQL.Database;
 			}
-			
+
 			// Force the issue on this one.
 			if (!this.options.MySQL.namedPlaceholders)
 			{
@@ -86,6 +86,7 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 
 		this.serviceType = 'MeadowConnectionMySQL';
 		this._ConnectionPool = false;
+		this.connected = false;
 
 		if (this.options.MeadowConnectionMySQLAutoConnect)
 		{
@@ -116,6 +117,7 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 		else
 		{
 			this._ConnectionPool = libMySQL.createPool(tmpConnectionSettings);
+			this.connected = true;
 		}
 	}
 

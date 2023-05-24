@@ -1,6 +1,6 @@
 {
-  "name": "medaow-connection-mysql",
-  "version": "1.0.1",
+  "name": "meadow-connection-mysql",
+  "version": "1.0.2",
   "description": "Meadow MySQL Plugin",
   "main": "source/Meadow-Connection-MySQL.js",
   "scripts": {
