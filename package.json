@@ -1,0 +1,65 @@
+{
+  "name": "medaow-connection-mysql",
+  "version": "1.0.1",
+  "description": "Meadow MySQL Plugin",
+  "main": "source/Meadow-Connection-MySQL.js",
+  "scripts": {
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
+    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec",
+    "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t retold/meadow-connection-mysql:local",
+    "docker-dev-run": "docker run -it -d --name retold-meadow-connection-mysql-dev -p 38001:8080 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/meadow-connection-mysql\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/meadow-connection-mysql:local",
+    "docker-dev-shell": "docker exec -it retold-meadow-connection-mysql-dev /bin/bash"
+  },
+  "mocha": {
+    "diff": true,
+    "extension": [
+      "js"
+    ],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": "75",
+    "timeout": "5000",
+    "ui": "tdd",
+    "watch-files": [
+      "source/**/*.js",
+      "test/**/*.js"
+    ],
+    "watch-ignore": [
+      "lib/vendor"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevenvelozo/meadow-connection-mysql.git"
+  },
+  "keywords": [
+    "cache"
+  ],
+  "author": "Steven Velozo <steven@velozo.com> (http://velozo.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stevenvelozo/meadow-connection-mysql/issues"
+  },
+  "homepage": "https://github.com/stevenvelozo/meadow-connection-mysql",
+  "devDependencies": {
+    "@babel/core": "^7.21.5",
+    "@babel/preset-env": "^7.21.5",
+    "browserify": "^17.0.0",
+    "chai": "4.3.7",
+    "fable": "^3.0.46",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-env": "^0.4.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-terser": "^2.1.0",
+    "gulp-util": "^3.0.8",
+    "mocha": "10.2.0",
+    "nyc": "^15.1.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "fable-serviceproviderbase": "^3.0.4",
+    "mysql2": "^3.3.2"
+  }
+}

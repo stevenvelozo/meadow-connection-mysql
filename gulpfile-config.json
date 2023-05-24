@@ -1,0 +1,11 @@
+{
+	"EntrypointInputSourceFile": "./source/CacheTrax-Browser-Shim.js",
+
+	"LibraryObjectName": "CacheTrax",
+
+	"LibraryOutputFolder": "./dist/",
+
+	"LibraryUniminifiedFileName": "cachetrax.compatible.js",
+
+	"LibraryMinifiedFileName": "cachetrax.compatible.min.js"
+}
