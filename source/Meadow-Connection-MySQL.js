@@ -116,6 +116,7 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 		}
 		else
 		{
+			this.fable.log.info(`Meadow-Connection-MySQL connecting to [${this.options.MySQL.host} : ${this.options.MySQL.port}] as ${this.options.MySQL.user} for database ${this.options.MySQL.database} at a connection limit of ${this.options.MySQL.connectionLimit}`);
 			this._ConnectionPool = libMySQL.createPool(tmpConnectionSettings);
 			this.connected = true;
 		}
