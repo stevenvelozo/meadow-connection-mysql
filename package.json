@@ -1,11 +1,11 @@
 {
   "name": "meadow-connection-mysql",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Meadow MySQL Plugin",
   "main": "source/Meadow-Connection-MySQL.js",
   "scripts": {
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec",
+    "test": "./node_modules/mocha/bin/_mocha -u tdd --exit -R spec",
     "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t retold/meadow-connection-mysql:local",
     "docker-dev-run": "docker run -it -d --name retold-meadow-connection-mysql-dev -p 38001:8080 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/meadow-connection-mysql\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/meadow-connection-mysql:local",
     "docker-dev-shell": "docker exec -it retold-meadow-connection-mysql-dev /bin/bash"
@@ -42,11 +42,11 @@
   },
   "homepage": "https://github.com/stevenvelozo/meadow-connection-mysql",
   "devDependencies": {
-    "@babel/core": "^7.21.5",
-    "@babel/preset-env": "^7.21.5",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
     "browserify": "^17.0.0",
-    "chai": "4.3.7",
-    "fable": "^3.0.46",
+    "chai": "4.3.10",
+    "fable": "^3.0.96",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-env": "^0.4.0",
@@ -59,7 +59,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "fable-serviceproviderbase": "^3.0.4",
-    "mysql2": "^3.3.2"
+    "fable-serviceproviderbase": "^3.0.12",
+    "mysql2": "^3.6.3"
   }
 }

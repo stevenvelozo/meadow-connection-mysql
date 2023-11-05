@@ -73,7 +73,7 @@ suite
 							{
 								Expect(pRows).to.be.an('array');
 								Expect(pRows.length).to.equal(10);
-								Expect(pRows[0].Title).to.equal(`Harry Potter and the Philosopher's Stone`);
+								Expect(pRows[0].Title).to.equal(`Angels & Demons`);
 								return fDone();
 							});
 					}
@@ -98,7 +98,7 @@ suite
 							{
 								Expect(pRows).to.be.an('array');
 								Expect(pRows.length).to.equal(10);
-								Expect(pRows[1].Title).to.equal(`The Catcher in the Rye`);
+								Expect(pRows[1].Title).to.equal(`Harry Potter and the Philosopher's Stone`);
 								return fDone();
 							});
 					}
@@ -123,7 +123,7 @@ suite
 							{
 								Expect(pRows).to.be.an('array');
 								Expect(pRows.length).to.equal(10);
-								Expect(pRows[1].Title).to.equal(`The Catcher in the Rye`);
+								Expect(pRows[1].Title).to.equal(`Harry Potter and the Philosopher's Stone`);
 								return fDone();
 							});
 					}
