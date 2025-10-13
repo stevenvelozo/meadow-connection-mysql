@@ -46,7 +46,7 @@
     "@babel/preset-env": "^7.23.2",
     "browserify": "^17.0.0",
     "chai": "4.3.10",
-    "fable": "^3.0.96",
+    "fable": "^3.1.22",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-env": "^0.4.0",
@@ -59,7 +59,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "fable-serviceproviderbase": "^3.0.12",
+    "fable-serviceproviderbase": "^3.0.15",
     "mysql2": "^3.6.3"
   }
 }

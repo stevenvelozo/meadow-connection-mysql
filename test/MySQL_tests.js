@@ -33,7 +33,9 @@ const _FableConfig = (
 		"MySQL":
 			{
 				"Server": "127.0.0.1",
-				"Port": 3306,
+				// October 2025 - updated this to match retold harness running locally either in docker or natively
+				"Port": 31306,
+				//"Port": 3306,
 				"User": "root",
 				"Password": "123456789",
 				"Database": "bookstore",
@@ -101,6 +103,34 @@ suite
 								Expect(pRows[1].Title).to.equal(`Harry Potter and the Philosopher's Stone`);
 								return fDone();
 							});
+					}
+				);
+				test
+				(
+					'connect asynchronously',
+					(fDone) =>
+					{
+						let _Fable = new libFable();
+						_Fable.serviceManager.addServiceType('MeadowMySQLProvider', libMeadowConnectionMySQL);
+
+						_Fable.serviceManager.instantiateServiceProvider('MeadowMySQLProvider', {MySQL: _FableConfig.MySQL});
+
+						Expect(_Fable.MeadowMySQLProvider).to.be.an('object');
+
+						_Fable.MeadowMySQLProvider.connectAsync(
+							function (pError, pConnectionPool)
+							{
+							// We should now have a fully charged MySQL connection pool utensil
+							_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+								(pError, pRows, pFields) =>
+								{
+									Expect(pRows).to.be.an('array');
+									Expect(pRows.length).to.equal(10);
+									Expect(pRows[1].Title).to.equal(`Harry Potter and the Philosopher's Stone`);
+									return fDone();
+								});
+							}
+						);
 					}
 				);
 				test

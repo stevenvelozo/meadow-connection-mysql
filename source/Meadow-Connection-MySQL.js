@@ -207,7 +207,6 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 				if (pError)
 				{
 					if (pError.hasOwnProperty('originalError')
-						// TODO: This check may be extraneous; not familiar enough with the mssql node driver yet
 						&& (pError.originalError.hasOwnProperty('info'))
 						// TODO: Validate that there isn't a better way to find this (pError.code isn't explicit enough)
 						&& (pError.originalError.info.message.indexOf("There is already an object named") == 0)
@@ -259,6 +258,38 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 			this.fable.log.info(`Meadow-Connection-MySQL connecting to [${this.options.MySQL.host} : ${this.options.MySQL.port}] as ${this.options.MySQL.user} for database ${this.options.MySQL.database} at a connection limit of ${this.options.MySQL.connectionLimit}`);
 			this._ConnectionPool = libMySQL.createPool(tmpConnectionSettings);
 			this.connected = true;
+		}
+	}
+
+	connectAsync(fCallback)
+	{
+		// Although MySQL connection is always sync (it manages the TCP layer
+		// entirely) this is here to keep consistency for other drivers that
+		// may need to do async work to connect sucn as MSSQL.
+		let tmpCallback = fCallback;
+		if (typeof (tmpCallback) !== 'function')
+		{
+			this.log.error(`Meadow MySQL connectAsync() called without a callback; this could lead to connection race conditions.`);
+			tmpCallback = () => { };
+		}
+
+		try
+		{
+			// Create the pool if it doesn't exist
+			if (this._ConnectionPool)
+			{
+				return tmpCallback(null, this._ConnectionPool);
+			}
+			else
+			{
+				this.connect();
+				return tmpCallback(null, this._ConnectionPool);
+			}
+		}
+		catch(pError)
+		{
+			this.log.error(`Meadow MySQL connectAsync() trapped an error trying to connect to server: ${pError}`, pError);
+			return tmpCallback(pError);
 		}
 	}
 
