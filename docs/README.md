@@ -1,0 +1,160 @@
+# Meadow Connection MySQL
+
+A Fable service that wraps mysql2 connection pooling for use with Meadow. Register it once and every Meadow entity in your application shares the same managed pool.
+
+## Quick Start
+
+```bash
+npm install meadow-connection-mysql
+```
+
+### One-liner with auto-connect
+
+```javascript
+const libFable = require('fable');
+const libMeadowConnectionMySQL = require('meadow-connection-mysql');
+
+let _Fable = new libFable({
+    Product: 'MyApp',
+    MySQL: {
+        Server: '127.0.0.1',
+        Port: 3306,
+        User: 'root',
+        Password: 'secret',
+        Database: 'myapp',
+        ConnectionPoolLimit: 20
+    },
+    MeadowConnectionMySQLAutoConnect: true
+});
+
+_Fable.serviceManager.addAndInstantiateServiceType(
+    'MeadowMySQLProvider', libMeadowConnectionMySQL);
+
+// Pool is ready -- query immediately
+_Fable.MeadowMySQLProvider.pool.query(
+    'SELECT * FROM Book LIMIT 10',
+    (pError, pRows, pFields) =>
+    {
+        console.log(`Found ${pRows.length} books.`);
+    });
+```
+
+### Manual connect
+
+If you prefer to control when the connection is established, omit the auto-connect flag:
+
+```javascript
+let _Fable = new libFable({
+    Product: 'MyApp',
+    MySQL: {
+        Server: '127.0.0.1',
+        Port: 3306,
+        User: 'root',
+        Password: 'secret',
+        Database: 'myapp',
+        ConnectionPoolLimit: 20
+    }
+});
+
+_Fable.serviceManager.addServiceType('MeadowMySQLProvider', libMeadowConnectionMySQL);
+_Fable.serviceManager.instantiateServiceProvider('MeadowMySQLProvider');
+
+// Connect when you are ready
+_Fable.MeadowMySQLProvider.connect();
+```
+
+### Async connect
+
+For consistency with other database drivers (MSSQL, SQLite) there is an async callback form:
+
+```javascript
+_Fable.MeadowMySQLProvider.connectAsync(
+    (pError, pConnectionPool) =>
+    {
+        if (pError) return console.error(pError);
+
+        pConnectionPool.query('SELECT 1',
+            (pError, pRows) =>
+            {
+                console.log('Connected!');
+            });
+    });
+```
+
+## Configuration
+
+MySQL settings can come from Fable's global settings or be passed directly to the service instance.
+
+### From Fable settings (recommended)
+
+```javascript
+let _Fable = new libFable({
+    MySQL: {
+        Server: '127.0.0.1',
+        Port: 3306,
+        User: 'root',
+        Password: 'secret',
+        Database: 'myapp',
+        ConnectionPoolLimit: 20
+    },
+    MeadowConnectionMySQLAutoConnect: true
+});
+```
+
+| Setting | Type | Description |
+|---------|------|-------------|
+| `MySQL.Server` | string | MySQL hostname |
+| `MySQL.Port` | number | MySQL port (default 3306) |
+| `MySQL.User` | string | Database user |
+| `MySQL.Password` | string | Database password |
+| `MySQL.Database` | string | Target database name |
+| `MySQL.ConnectionPoolLimit` | number | Maximum concurrent connections in the pool |
+| `MeadowConnectionMySQLAutoConnect` | boolean | If true, connects during service instantiation |
+
+### Per-instance settings
+
+Pass a MySQL config object when instantiating the service:
+
+```javascript
+_Fable.serviceManager.instantiateServiceProvider('MeadowMySQLProvider',
+    {
+        MySQL: {
+            host: '127.0.0.1',
+            port: 3306,
+            user: 'root',
+            password: 'secret',
+            database: 'myapp',
+            connectionLimit: 20
+        }
+    });
+```
+
+Both PascalCase (`Server`, `ConnectionPoolLimit`) and camelCase (`host`, `connectionLimit`) property names are accepted. The constructor coerces legacy PascalCase to the camelCase format that mysql2 expects.
+
+## Using with Meadow
+
+Once the pool is registered, Meadow entities use it automatically when their provider is set to MySQL:
+
+```javascript
+const libMeadow = require('meadow');
+
+let tmpBookDAL = _Meadow.loadFromPackage(__dirname + '/model/Book.json');
+tmpBookDAL.setProvider('MySQL');
+
+// Meadow routes queries through the registered pool
+tmpBookDAL.doReads(tmpBookDAL.query, (pError, pQuery, pRecords) =>
+{
+    console.log(`Read ${pRecords.length} books.`);
+});
+```
+
+## Table Creation
+
+The service can generate and execute CREATE TABLE statements from Meadow schema definitions. See [Schema & Table Creation](schema.md) for details.
+
+## Learn More
+
+- [Schema & Table Creation](schema.md) -- Generate MySQL tables from Meadow schemas
+- [API Reference](api.md) -- Complete method and property documentation
+- [Meadow](/meadow/meadow/) -- The data access layer
+- [FoxHound](/meadow/foxhound/) -- Query DSL used by Meadow
