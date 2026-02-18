@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql-test:
+    image: mysql:8
+    container_name: meadow-connection-mysql-test
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234567890"
+      MYSQL_DATABASE: bookstore
+    ports:
+      - "23306:3306"
+    volumes:
+      - ./test/docker-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p1234567890"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s

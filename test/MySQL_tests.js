@@ -33,11 +33,9 @@ const _FableConfig = (
 		"MySQL":
 			{
 				"Server": "127.0.0.1",
-				// October 2025 - updated this to match retold harness running locally either in docker or natively
-				"Port": 31306,
-				//"Port": 3306,
+				"Port": 23306,
 				"User": "root",
-				"Password": "123456789",
+				"Password": "1234567890",
 				"Database": "bookstore",
 				"ConnectionPoolLimit": 20
 			}
@@ -70,12 +68,12 @@ suite
 						_Fable.MeadowMySQLProvider.connect();
 
 						// We should now have a fully charged MySQL connection pool utensil
-						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book ORDER BY IDBook ASC LIMIT 10`,
 							(pError, pRows, pFields) =>
 							{
 								Expect(pRows).to.be.an('array');
 								Expect(pRows.length).to.equal(10);
-								Expect(pRows[0].Title).to.equal(`Angels & Demons`);
+								Expect(pRows[0].Title).to.equal(`The Hunger Games`);
 								return fDone();
 							});
 					}
@@ -95,7 +93,7 @@ suite
 						_Fable.MeadowMySQLProvider.connect();
 
 						// We should now have a fully charged MySQL connection pool utensil
-						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book ORDER BY IDBook ASC LIMIT 10`,
 							(pError, pRows, pFields) =>
 							{
 								Expect(pRows).to.be.an('array');
@@ -121,7 +119,7 @@ suite
 							function (pError, pConnectionPool)
 							{
 							// We should now have a fully charged MySQL connection pool utensil
-							_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+							_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book ORDER BY IDBook ASC LIMIT 10`,
 								(pError, pRows, pFields) =>
 								{
 									Expect(pRows).to.be.an('array');
@@ -148,7 +146,7 @@ suite
 						Expect(_Fable.MeadowMySQLProvider).to.be.an('object');
 
 						// We should now have a fully charged MySQL connection pool utensil
-						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book LIMIT 10`,
+						_Fable.MeadowMySQLProvider.pool.query(`SELECT * FROM Book ORDER BY IDBook ASC LIMIT 10`,
 							(pError, pRows, pFields) =>
 							{
 								Expect(pRows).to.be.an('array');
