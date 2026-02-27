@@ -4,8 +4,8 @@
   "description": "Meadow MySQL Plugin",
   "main": "source/Meadow-Connection-MySQL.js",
   "scripts": {
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/mocha/bin/_mocha -u tdd --exit -R spec",
+    "coverage": "npx quack coverage",
+    "test": "npx mocha -u tdd --exit -R spec",
     "docker-mysql-start": "bash ./start-mysql.sh",
     "docker-mysql-stop": "bash ./stop-mysql.sh",
     "test-docker": "bash ./start-mysql.sh && npm test; bash ./stop-mysql.sh",
