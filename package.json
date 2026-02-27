@@ -5,7 +5,7 @@
   "main": "source/Meadow-Connection-MySQL.js",
   "scripts": {
     "coverage": "npx quack coverage",
-    "test": "npx mocha -u tdd --exit -R spec",
+    "test": "npx quack test",
     "docker-mysql-start": "bash ./start-mysql.sh",
     "docker-mysql-stop": "bash ./stop-mysql.sh",
     "test-docker": "bash ./start-mysql.sh && npm test; bash ./stop-mysql.sh",
