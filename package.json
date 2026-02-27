@@ -1,6 +1,6 @@
 {
   "name": "meadow-connection-mysql",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Meadow MySQL Plugin",
   "main": "source/Meadow-Connection-MySQL.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "quackage": "^1.0.58"
   },
   "dependencies": {
-    "fable-serviceproviderbase": "^3.0.18",
+    "fable-serviceproviderbase": "^3.0.19",
     "mysql2": "^3.6.3"
   }
 }
