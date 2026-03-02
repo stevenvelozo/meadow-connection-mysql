@@ -10,13 +10,13 @@ A MySQL connection pool provider for the Meadow ORM. Wraps [mysql2](https://gith
 
 ## Features
 
-- **MySQL2 Connection Pooling** - High-performance pooled connections via [mysql2](https://github.com/sidorares/node-mysql2)
-- **Fable Service Provider** - Registers with a Fable instance for dependency injection, logging, and configuration
-- **Named Placeholders** - Automatically enables named placeholders for parameterized queries
-- **Auto-Connect** - Optional automatic connection on instantiation via the `MeadowConnectionMySQLAutoConnect` flag
-- **Schema-Driven DDL** - Generates `CREATE TABLE IF NOT EXISTS` statements from Meadow table schemas with primary keys, UTF-8 charset, and proper column types
-- **Connection Safety** - Guards against creating duplicate connection pools with descriptive logging (passwords are never leaked)
-- **Settings Coercion** - Accepts both Meadow-style (`Server`, `Port`, `User`) and mysql2-native (`host`, `port`, `user`) configuration formats
+- **MySQL2 Connection Pooling** -- High-performance pooled connections via [mysql2](https://github.com/sidorares/node-mysql2)
+- **Fable Service Provider** -- Registers with a Fable instance for dependency injection, logging, and configuration
+- **Named Placeholders** -- Automatically enables named placeholders for parameterized queries
+- **Auto-Connect** -- Optional automatic connection on instantiation via the `MeadowConnectionMySQLAutoConnect` flag
+- **Schema-Driven DDL** -- Generates `CREATE TABLE IF NOT EXISTS` statements from Meadow table schemas with primary keys, UTF-8 charset, and proper column types
+- **Connection Safety** -- Guards against creating duplicate connection pools with descriptive logging (passwords are never leaked)
+- **Settings Coercion** -- Accepts both Meadow-style (`Server`, `Port`, `User`) and mysql2-native (`host`, `port`, `user`) configuration formats
 
 ## Installation
 
@@ -167,13 +167,13 @@ Generate a `DROP TABLE IF EXISTS` SQL statement for the given table name.
 
 Meadow Connection MySQL is a database connector for the Meadow data access layer:
 
-- [meadow](https://github.com/stevenvelozo/meadow) - ORM and data access framework
-- [foxhound](https://github.com/stevenvelozo/foxhound) - Query DSL used by Meadow
-- [stricture](https://github.com/stevenvelozo/stricture) - Schema definition tool
-- [meadow-endpoints](https://github.com/stevenvelozo/meadow-endpoints) - RESTful endpoint generation
-- [meadow-connection-mssql](https://github.com/stevenvelozo/meadow-connection-mssql) - MSSQL connector
-- [meadow-connection-sqlite](https://github.com/stevenvelozo/meadow-connection-sqlite) - SQLite connector
-- [fable](https://github.com/stevenvelozo/fable) - Application services framework
+- [meadow](https://github.com/stevenvelozo/meadow) -- ORM and data access framework
+- [foxhound](https://github.com/stevenvelozo/foxhound) -- Query DSL used by Meadow
+- [stricture](https://github.com/stevenvelozo/stricture) -- Schema definition tool
+- [meadow-endpoints](https://github.com/stevenvelozo/meadow-endpoints) -- RESTful endpoint generation
+- [meadow-connection-mssql](https://github.com/stevenvelozo/meadow-connection-mssql) -- MSSQL connector
+- [meadow-connection-sqlite](https://github.com/stevenvelozo/meadow-connection-sqlite) -- SQLite connector
+- [fable](https://github.com/stevenvelozo/fable) -- Application services framework
 
 ## Testing
 
@@ -191,8 +191,9 @@ npm run coverage
 
 ## Related Packages
 
-- [meadow](https://github.com/stevenvelozo/meadow) - Data access and ORM
-- [fable](https://github.com/stevenvelozo/fable) - Application services framework
+- [meadow](https://github.com/stevenvelozo/meadow) -- Data access and ORM
+- [meadow-connection-rocksdb](https://github.com/stevenvelozo/meadow-connection-rocksdb) -- RocksDB connection provider
+- [fable](https://github.com/stevenvelozo/fable) -- Application services framework
 
 ## License
 
