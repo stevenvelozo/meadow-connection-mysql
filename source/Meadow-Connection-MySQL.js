@@ -6,6 +6,8 @@ const libFableServiceProviderBase = require('fable-serviceproviderbase');
 
 const libMySQL = require('mysql2');
 
+const libMeadowSchemaMySQL = require('./Meadow-Schema-MySQL.js');
+
 /*
 	Das alt muster:
 
@@ -88,149 +90,105 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 		this._ConnectionPool = false;
 		this.connected = false;
 
+		// Schema provider handles DDL operations (create, drop, index, etc.)
+		this._SchemaProvider = new libMeadowSchemaMySQL(this.fable, this.options, `${this.Hash}-Schema`);
+
 		if (this.options.MeadowConnectionMySQLAutoConnect)
 		{
 			this.connect();
 		}
 	}
 
+	get schemaProvider()
+	{
+		return this._SchemaProvider;
+	}
+
 	generateDropTableStatement(pTableName)
 	{
-		return `DROP TABLE IF EXISTS ${pTableName};`;
+		return this._SchemaProvider.generateDropTableStatement(pTableName);
 	}
 
 	generateCreateTableStatement(pMeadowTableSchema)
 	{
-		this.log.info(`--> Building the table create string for ${pMeadowTableSchema} ...`);
-
-		let tmpPrimaryKey = false;
-		let tmpCreateTableStatement = `--   [ ${pMeadowTableSchema.TableName} ]`;
-		
-		tmpCreateTableStatement += `\nCREATE TABLE IF NOT EXISTS \n    ${pMeadowTableSchema.TableName}\n    (`;
-		for (let j = 0; j < pMeadowTableSchema.Columns.length; j++)
-		{
-			let tmpColumn = pMeadowTableSchema.Columns[j];
-
-			// If we aren't the first column, append a comma.
-			if (j > 0)
-			{
-				tmpCreateTableStatement += `,`;
-			}
-
-			tmpCreateTableStatement += `\n`;
-			// Dump out each column......
-			switch (tmpColumn.DataType)
-			{
-				case 'ID':
-					// if (this.options.AllowIdentityInsert)
-					// {
-					// 	tmpCreateTableStatement += `        [${tmpColumn.Column}] INT NOT NULL PRIMARY KEY`;
-					// }
-					// else
-					// {
-					// There is debate on whether IDENTITY(1,1) is better or not.
-					tmpCreateTableStatement += `        ${tmpColumn.Column} INT UNSIGNED NOT NULL AUTO_INCREMENT`;
-					//}
-					tmpPrimaryKey = tmpColumn.Column;
-					break;
-				case 'GUID':
-					let tmpSize = tmpColumn.hasOwnProperty('Size') ? tmpColumn.Size : 36;
-					if (isNaN(tmpSize))
-					{
-						// Use the old default if Size is improper
-						tmpSize = 36;
-					}
-					tmpCreateTableStatement += `        ${tmpColumn.Column} CHAR(${tmpSize}) DEFAULT '0xDe'`;
-					break;
-				case 'ForeignKey':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} INT UNSIGNED NOT NULL DEFAULT '0'`;
-					tmpPrimaryKey = tmpColumn.Column;
-					break;
-				case 'Numeric':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} INT NOT NULL DEFAULT '0'`;
-					break;
-				case 'Decimal':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} DECIMAL(${tmpColumn.Size})`;
-					break;
-				case 'String':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} CHAR(${tmpColumn.Size}) NOT NULL DEFAULT ''`;
-					break;
-				case 'Text':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} TEXT`;
-					break;
-				case 'DateTime':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} DATETIME`;
-					break;
-				case 'Boolean':
-					tmpCreateTableStatement += `        ${tmpColumn.Column} TINYINT NOT NULL DEFAULT '0'`;
-					break;
-				default:
-					break;
-			}
-		}
-		if (tmpPrimaryKey)
-		{
-							tmpCreateTableStatement += `,\n\n        PRIMARY KEY (${tmpPrimaryKey})`;
-		}
-		tmpCreateTableStatement += `\n    ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;`;
-
-		//this.log.info(`Generated Create Table Statement: ${tmpCreateTableStatement}`);
-
-		return tmpCreateTableStatement;
+		return this._SchemaProvider.generateCreateTableStatement(pMeadowTableSchema);
 	}
 
 	createTables(pMeadowSchema, fCallback)
 	{
-		// Now create the Book databases if they don't exist.
-		this.fable.Utility.eachLimit(pMeadowSchema.Tables, 1,
-			(pTable, fCreateComplete) =>
-			{
-				return this.createTable(pTable, fCreateComplete)
-			},
-			(pCreateError) =>
-			{
-				if (pCreateError)
-				{
-					this.log.error(`Meadow-MySQL Error creating tables from Schema: ${pCreateError}`,pCreateError);
-				}
-				this.log.info('Done creating tables!');
-				return fCallback(pCreateError);
-			});
+		return this._SchemaProvider.createTables(pMeadowSchema, fCallback);
 	}
 
 	createTable(pMeadowTableSchema, fCallback)
 	{
-		let tmpCreateTableStatement = this.generateCreateTableStatement(pMeadowTableSchema);
-		this._ConnectionPool.query(tmpCreateTableStatement, 
-			function(pError, pRows, pFields)
-			{
-				if (pError)
-				{
-					if (pError.hasOwnProperty('originalError')
-						&& (pError.originalError.hasOwnProperty('info'))
-						// TODO: Validate that there isn't a better way to find this (pError.code isn't explicit enough)
-						&& (pError.originalError.info.message.indexOf("There is already an object named") == 0)
-						&& (pError.originalError.info.message.indexOf('in the database.') > 0))
-					{
-						// The table already existed; log a warning but keep on keeping on.
-						this.log.warn(`Meadow-MySQL CREATE TABLE ${pMeadowTableSchema.TableName} executed but table already existed.`);
-						//this.log.warn(`Meadow-MySQL Create Table Statement: ${tmpCreateTableStatement}`)
-						return fCallback();
-					}
-					else
-					{
-						this.log.error(`Meadow-MySQL CREATE TABLE ${pMeadowTableSchema.TableName} failed!`, pError);
-						//this.log.warn(`Meadow-MySQL Create Table Statement: ${tmpCreateTableStatement}`)
-						return fCallback(pError);
-					}
-				}
-				else
-				{
-					this.log.info(`Meadow-MySQL CREATE TABLE ${pMeadowTableSchema.TableName} executed successfully.`);
-					//this.log.info(`Meadow-MySQL Create Table Statement: ${tmpCreateTableStatement}`)
-					return fCallback();
-				}
-			}.bind(this));
+		return this._SchemaProvider.createTable(pMeadowTableSchema, fCallback);
+	}
+
+	getIndexDefinitionsFromSchema(pMeadowTableSchema)
+	{
+		return this._SchemaProvider.getIndexDefinitionsFromSchema(pMeadowTableSchema);
+	}
+
+	generateCreateIndexScript(pMeadowTableSchema)
+	{
+		return this._SchemaProvider.generateCreateIndexScript(pMeadowTableSchema);
+	}
+
+	generateCreateIndexStatements(pMeadowTableSchema)
+	{
+		return this._SchemaProvider.generateCreateIndexStatements(pMeadowTableSchema);
+	}
+
+	createIndex(pIndexStatement, fCallback)
+	{
+		return this._SchemaProvider.createIndex(pIndexStatement, fCallback);
+	}
+
+	createIndices(pMeadowTableSchema, fCallback)
+	{
+		return this._SchemaProvider.createIndices(pMeadowTableSchema, fCallback);
+	}
+
+	createAllIndices(pMeadowSchema, fCallback)
+	{
+		return this._SchemaProvider.createAllIndices(pMeadowSchema, fCallback);
+	}
+
+	// Database Introspection delegation
+
+	listTables(fCallback)
+	{
+		return this._SchemaProvider.listTables(fCallback);
+	}
+
+	introspectTableColumns(pTableName, fCallback)
+	{
+		return this._SchemaProvider.introspectTableColumns(pTableName, fCallback);
+	}
+
+	introspectTableIndices(pTableName, fCallback)
+	{
+		return this._SchemaProvider.introspectTableIndices(pTableName, fCallback);
+	}
+
+	introspectTableForeignKeys(pTableName, fCallback)
+	{
+		return this._SchemaProvider.introspectTableForeignKeys(pTableName, fCallback);
+	}
+
+	introspectTableSchema(pTableName, fCallback)
+	{
+		return this._SchemaProvider.introspectTableSchema(pTableName, fCallback);
+	}
+
+	introspectDatabaseSchema(fCallback)
+	{
+		return this._SchemaProvider.introspectDatabaseSchema(fCallback);
+	}
+
+	generateMeadowPackageFromTable(pTableName, fCallback)
+	{
+		return this._SchemaProvider.generateMeadowPackageFromTable(pTableName, fCallback);
 	}
 
 	connect()
@@ -257,6 +215,7 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 		{
 			this.fable.log.info(`Meadow-Connection-MySQL connecting to [${this.options.MySQL.host} : ${this.options.MySQL.port}] as ${this.options.MySQL.user} for database ${this.options.MySQL.database} at a connection limit of ${this.options.MySQL.connectionLimit}`);
 			this._ConnectionPool = libMySQL.createPool(tmpConnectionSettings);
+			this._SchemaProvider.setConnectionPool(this._ConnectionPool);
 			this.connected = true;
 		}
 	}
