@@ -49,7 +49,7 @@ const _BookTableSchema =
 	[
 		{ Column: 'IDBook', DataType: 'ID' },
 		{ Column: 'GUIDBook', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256' },
+		{ Column: 'Title', DataType: 'String', Size: '255' },
 		{ Column: 'Description', DataType: 'Text' },
 		{ Column: 'Price', DataType: 'Decimal', Size: '10,2' },
 		{ Column: 'IDAuthor', DataType: 'ForeignKey' }
@@ -63,7 +63,7 @@ const _BookTableSchemaWithColumnIndexed =
 	[
 		{ Column: 'IDBook', DataType: 'ID' },
 		{ Column: 'GUIDBook', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256', Indexed: true },
+		{ Column: 'Title', DataType: 'String', Size: '255', Indexed: true },
 		{ Column: 'Email', DataType: 'String', Size: '512', Indexed: 'unique' },
 		{ Column: 'IDAuthor', DataType: 'ForeignKey' }
 	]
@@ -76,7 +76,7 @@ const _BookTableSchemaWithIndexName =
 	[
 		{ Column: 'IDBookCustomIdx', DataType: 'ID' },
 		{ Column: 'GUIDBookCustomIdx', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256', Indexed: true, IndexName: 'IX_Custom_Title' },
+		{ Column: 'Title', DataType: 'String', Size: '255', Indexed: true, IndexName: 'IX_Custom_Title' },
 		{ Column: 'Email', DataType: 'String', Size: '512', Indexed: 'unique', IndexName: 'UQ_BookCustomIdx_Email' },
 		{ Column: 'Rating', DataType: 'Numeric', Indexed: true },
 		{ Column: 'IDAuthor', DataType: 'ForeignKey' }
@@ -91,7 +91,7 @@ const _IntrospectBookSchema =
 	[
 		{ Column: 'IDIntrospBook', DataType: 'ID' },
 		{ Column: 'GUIDIntrospBook', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256' },
+		{ Column: 'Title', DataType: 'String', Size: '255' },
 		{ Column: 'Description', DataType: 'Text' },
 		{ Column: 'Price', DataType: 'Decimal', Size: '10,2' },
 		{ Column: 'PageCount', DataType: 'Numeric' },
@@ -108,7 +108,7 @@ const _IntrospectBookIndexedSchema =
 	[
 		{ Column: 'IDIntrospBookIdx', DataType: 'ID' },
 		{ Column: 'GUIDIntrospBookIdx', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256', Indexed: true },
+		{ Column: 'Title', DataType: 'String', Size: '255', Indexed: true },
 		{ Column: 'Description', DataType: 'Text' },
 		{ Column: 'ISBN', DataType: 'String', Size: '64', Indexed: 'unique' },
 		{ Column: 'IDPublisher', DataType: 'ForeignKey' }
@@ -122,7 +122,7 @@ const _IntrospectBookCustomIdxSchema =
 	[
 		{ Column: 'IDIntrospBookCustIdx', DataType: 'ID' },
 		{ Column: 'GUIDIntrospBookCustIdx', DataType: 'GUID' },
-		{ Column: 'Title', DataType: 'String', Size: '256', Indexed: true, IndexName: 'IX_Custom_Title' },
+		{ Column: 'Title', DataType: 'String', Size: '255', Indexed: true, IndexName: 'IX_Custom_Title' },
 		{ Column: 'ISBN', DataType: 'String', Size: '64', Indexed: 'unique', IndexName: 'UQ_IntrospBookCustIdx_ISBN' },
 		{ Column: 'YearPublished', DataType: 'Numeric', Indexed: true },
 		{ Column: 'IDEditor', DataType: 'ForeignKey' }

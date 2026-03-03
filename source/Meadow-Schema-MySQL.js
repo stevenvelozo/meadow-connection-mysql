@@ -74,7 +74,6 @@ class MeadowSchemaMySQL extends libFableServiceProviderBase
 					break;
 				case 'ForeignKey':
 					tmpCreateTableStatement += `        ${tmpColumn.Column} INT UNSIGNED NOT NULL DEFAULT '0'`;
-					tmpPrimaryKey = tmpColumn.Column;
 					break;
 				case 'Numeric':
 					tmpCreateTableStatement += `        ${tmpColumn.Column} INT NOT NULL DEFAULT '0'`;
