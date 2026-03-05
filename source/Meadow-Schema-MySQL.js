@@ -93,6 +93,12 @@ class MeadowSchemaMySQL extends libFableServiceProviderBase
 				case 'Boolean':
 					tmpCreateTableStatement += `        ${tmpColumn.Column} TINYINT NOT NULL DEFAULT '0'`;
 					break;
+				case 'JSON':
+					tmpCreateTableStatement += `        ${tmpColumn.Column} LONGTEXT`;
+					break;
+				case 'JSONProxy':
+					tmpCreateTableStatement += `        ${tmpColumn.StorageColumn} LONGTEXT`;
+					break;
 				default:
 					break;
 			}
@@ -1030,6 +1036,10 @@ class MeadowSchemaMySQL extends libFableServiceProviderBase
 				return 'DateTime';
 			case 'Boolean':
 				return 'Boolean';
+			case 'JSON':
+				return 'JSON';
+			case 'JSONProxy':
+				return 'JSONProxy';
 			default:
 				return 'String';
 		}
@@ -1063,6 +1073,10 @@ class MeadowSchemaMySQL extends libFableServiceProviderBase
 				return '';
 			case 'Boolean':
 				return false;
+			case 'JSON':
+				return {};
+			case 'JSONProxy':
+				return {};
 			default:
 				return '';
 		}
