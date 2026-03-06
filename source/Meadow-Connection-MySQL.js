@@ -67,15 +67,19 @@ class MeadowConnectionMySQL extends libFableServiceProviderBase
 		}
 		else if (typeof(this.fable.settings.MySQL) == 'object')
 		{
-			// TODO: Lint these settings for the user?  For now we will just presume they work and let errors do the dirty work.
+			// Coerce property names from any of three conventions:
+			//   Old-style (Server, Port, User, Password, Database, ConnectionPoolLimit)
+			//   Lowercase (server, port, user, password, database, connectionLimit)
+			//   mysql2-native (host, port, user, password, database, connectionLimit)
+			let tmpSettings = this.fable.settings.MySQL;
 			this.options.MySQL = (
 				{
-					connectionLimit: this.fable.settings.MySQL.ConnectionPoolLimit,
-					host: this.fable.settings.MySQL.Server,
-					port: this.fable.settings.MySQL.Port,
-					user: this.fable.settings.MySQL.User,
-					password: this.fable.settings.MySQL.Password,
-					database: this.fable.settings.MySQL.Database,
+					connectionLimit: tmpSettings.ConnectionPoolLimit || tmpSettings.connectionLimit,
+					host: tmpSettings.Server || tmpSettings.server || tmpSettings.host,
+					port: tmpSettings.Port || tmpSettings.port,
+					user: tmpSettings.User || tmpSettings.user,
+					password: tmpSettings.Password || tmpSettings.password,
+					database: tmpSettings.Database || tmpSettings.database,
 					namedPlaceholders: true
 				});
 		}
